@@ -15,7 +15,7 @@ mv oif /usr/bin/
 
 # Setup
 
-shodan api is `paid` and setup is `optional` but if want good results please setup...
+**shodan api is `paid` and setup is `optional` but if want good results please setup...**
 
 ```
 shodan init SHODAN_API_KEY
