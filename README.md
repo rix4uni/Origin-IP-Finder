@@ -27,3 +27,6 @@ shodan init SHODAN_API_KEY
 ```
 oif -d domain.com
 ```
+
+# Output
+![output](.github/image.png)
