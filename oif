@@ -1,15 +1,9 @@
 #!/bin/bash
 
-while getopts "d:c:z:" opt; do
+while getopts "d:" opt; do
   case $opt in
     d)
       domain=$OPTARG
-      ;;
-    c)
-      CENSYS_API_ID_CENSYS_API_SECRET=$OPTARG
-      ;;
-    z)
-      ZOOMEYE_API=$OPTARG
       ;;
     \?)
       echo "Invalid option: -$OPTARG" >&2
@@ -22,25 +16,20 @@ while getopts "d:c:z:" opt; do
   esac
 done
 
-if [[ -z $domain || -z $CENSYS_API_ID_CENSYS_API_SECRET || -z $ZOOMEYE_API ]]
+if [[ -z $domain ]]
 then
-  echo "Usage: $0 -d domain.com -c CENSYS_API_ID:CENSYS_API_SECRET -z ZOOMEYE_API"
+  echo "Usage: oif -d domain.com"
   exit 1
 fi
 
 
-title=$(echo "$domain" | httpx -title -server -silent)
-if echo "$title" | grep -q "\[cloudflare\]"
-then
-	echo "Website using Cloudflare:"
-	echo -e "$title\n"
+echo -e "\033[96mDomain Info:\033[0m"
+echo $domain | httpx -duc -silent -sc -cl -title
 
-	echo "Scanning..."
-	shodan=$(shodan search ssl:$domain --fields ip_str,port --separator ":" | sed 's/:$//' | sed 's/:\(80\|443\)$//')
-	censys=$(curl -s -g -X 'GET' 'https://search.censys.io/api/v2/hosts/search?per_page=25&virtual_hosts=EXCLUDE&q=$domain' -H 'Accept: application/json' --user "$CENSYS_API_ID_CENSYS_API_SECRET" | jq -r '.result.hits[] | (.ip + ":" + (.services[] | .port | tostring))' | sed 's/:\(80\|443\)$//')
-  zoomeye=$(curl -s -H "API-KEY: $ZOOMEYE_API" "https://api.zoomeye.org/host/search?query=$domain&page=1" | jq -r '.matches[] | .ip + ":" + (.portinfo.port | tostring)' | grep -v "*" | sed 's/:\(80\|443\)$//')
+echo -e "\n\033[96mOrigin IPs Info:\033[0m"
+dig=$(dig @1.1.1.1 $domain A +short)
+shodan=$(shodan search ssl:$domain --fields ip_str,port --separator ":" | sed 's/:$//' | sed 's/:\(80\|443\)$//')
 
-	echo $shodan $censys $zoomeye | tr ' ' '\n' | sort -u | httpx -title -server -silent
-else
-	echo "Website not using Cloudflare:"
-fi
+echo $shodan $dig | tr ' ' '\n' | sort -u | httpx -duc -silent -sc -cl -title
+
+echo -e "\n\033[91mNOTE: Check Same Content Length and Same Title that's Your Origin IPs:\033[0m"
