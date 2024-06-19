@@ -4,6 +4,7 @@
   - **[Shodan](https://www.shodan.io)**
   - **[Censys](https://search.censys.io)**
   - **[Zoomeye](https://www.zoomeye.org)**
+  - **[dig](https://phoenixnap.com/kb/linux-dig-command-examples)**
   
 # Installation
 ```
@@ -24,5 +25,5 @@ shodan init SHODAN_API_KEY
 # Usage
   
 ```
-oif -d domain.com -c CENSYS_API_ID:CENSYS_API_SECRET -z ZOOMEYE_API
+oif -d domain.com
 ```
