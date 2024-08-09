@@ -1,10 +1,15 @@
 # Origin-IP-Finder
 
 - **Available Search engine support**
-  - **[Shodan](https://www.shodan.io)**
-  - **[Censys](https://search.censys.io)**
-  - **[Zoomeye](https://www.zoomeye.org)**
   - **[dig](https://phoenixnap.com/kb/linux-dig-command-examples)**
+  - **[shodan](https://www.shodan.io)**
+  - **[censys](https://search.censys.io)**
+  - **[securitytrails](https://securitytrails.com)**
+  - **[viewdns](https://viewdns.info)**
+  - **[hunter-how](https://hunter.how)**
+  - **[fofa](https://en.fofa.info)**
+  - **[zoomeye](https://www.zoomeye.org)**
+  - **[zoomeye_without_api](https://www.zoomeye.org)**
   
 # Installation
 ```
@@ -26,6 +31,10 @@ shodan init SHODAN_API_KEY
   
 ```
 oif -d domain.com
+```
+
+```
+bash oif -d domain.com -censys censys-api-id:censys-api-secrect -securitytrails api -hunter api -zoomeye api
 ```
 
 # Output
